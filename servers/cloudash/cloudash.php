@@ -15,59 +15,37 @@ function cloudash_MetaData() {
 
 function cloudash_ConfigOptions() {
 	$configarray = array(
-	  "username" => array (
-	    "FriendlyName" => "UserName",
-	    "Type" => "text", # Text Box
-	    "Size" => "25", # Defines the Field Width
-	    "Description" => "Textbox",
-	    "Default" => "Example",
-	  ),
-	  "password" => array (
-	    "FriendlyName" => "Password",
-	    "Type" => "password", # Password Field
-	    "Size" => "25", # Defines the Field Width
-	    "Description" => "Password",
-	    "Default" => "Example",
-	  ),
 	  "disk" => array (
-	    "FriendlyName" => "Disk Space",
+	    "FriendlyName" => "HDD",
 	    "Type" => "text", # Text Box
 	    "Options" => "25",
-	    "Description" => "Disk Space",
-	    "Default" => "Disk Space",
+	    "Description" => "HD",
+	    "Default" => "10",
 	  ),
 	  "cpu" => array (
-	    "FriendlyName" => "Cpu Available",
+	    "FriendlyName" => "CPU Cores",
 	    "Type" => "text", # Text Box
 	    "Options" => "25",
-	    "Description" => "Cpu Available",
-	    "Default" => "CPU Available",
+	    "Description" => "CPU Cores",
+	    "Default" => "1",
 	  ),
 	  "memory" => array (
-	    "FriendlyName" => "Memory Available",
+	    "FriendlyName" => "Memory",
 	    "Type" => "text", # Text Box
 	    "Options" => "25",
-	    "Description" => "Memory Available",
-	    "Default" => "Memory Available",
-	  ),
-	  "comments" => array (
-	    "FriendlyName" => "Notes",
-	    "Type" => "textarea", # Textarea
-	    "Rows" => "3", # Number of Rows
-	    "Cols" => "50", # Number of Columns
-	    "Description" => "Description goes here",
-	    "Default" => "Enter notes here",
-	  ),
+	    "Description" => "Memory",
+	    "Default" => "1024",
+	  )
 	);
 	return $configarray;
 }
 
 function cloudash_CreateAccount($params) {
-	//error_log(print_r($params, true));
+	error_log(print_r($params, true));
 	$username = $params["serverusername"];
 	$password = $params["serverpassword"];
 
-	$request = new RestRequest("http://".$params["serverip"]."/api/user", "POST");
+	$request = new RestRequest($params["serverip"]."/api/user", "POST");
 	$request->setUsername($username);
 	$request->setPassword($password);
 	$auth = array(
@@ -86,10 +64,10 @@ function cloudash_CreateAccount($params) {
 		"zip" => $params["clientsdetails"]["postcode"],
 	);
 	$maxresources = array(
-		"vms" => $params["configoption4"],
-		"memory" => $params["configoption5"],
-		"storage" => $params["configoption3"],
-		"cpu" => $params["configoption4"],
+		"vms" => $params["configoption2"],
+		"memory" => $params["configoption3"],
+		"storage" => $params["configoption1"],
+		"cpu" => $params["configoption2"],
 	);
 	$par = array(
 		"auth" => $auth,
@@ -111,7 +89,7 @@ function cloudash_SuspendAccount($params) {
 	$username = $params["serverusername"];
 	$password = $params["serverpassword"];
 
-	$request = new RestRequest("http://".$params["serverip"]."/api/user/".$params["clientsdetails"]["email"], "PUT");
+	$request = new RestRequest($params["serverip"]."/api/user/".$params["clientsdetails"]["email"], "PUT");
 	$request->setUsername($username);
 	$request->setPassword($password);
 	$about = array(
@@ -138,7 +116,7 @@ function cloudash_UnsuspendAccount($params) {
 	$username = $params["serverusername"];
 	$password = $params["serverpassword"];
 
-	$request = new RestRequest("http://".$params["serverip"]."/api/user/".$params["clientsdetails"]["email"], "PUT");
+	$request = new RestRequest($params["serverip"]."/api/user/".$params["clientsdetails"]["email"], "PUT");
 	$request->setUsername($username);
 	$request->setPassword($password);
 	$about = array(
